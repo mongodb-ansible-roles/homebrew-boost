@@ -1,16 +1,9 @@
 class BoostAT170 < Formula
   desc "Collection of portable C++ source libraries"
   homepage "https://www.boost.org/"
-  url "https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.bz2"
+  url "https://boostorg.jfrog.io/artifactory/main/release/1.70.0/source/boost_1_70_0.tar.bz2"
   sha256 "430ae8354789de4fd19ee52f3b1f739e1fba576f0aded0897c3c2bc00fb38778"
   head "https://github.com/boostorg/boost.git"
-
-  bottle do
-    cellar :any
-    sha256 "c626b90770424ca969d0870d25d7fb13cf9d4f23a828407701face0e7ec4ac93" => :mojave
-    sha256 "8d5a7c95155faf57ce246d3455cea3628569d684a14fb9e621893ceaf3d65373" => :high_sierra
-    sha256 "0578344e152f306a4594b72493dcc3f638425b0fb7f4fcd23e5a523c4542b33a" => :sierra
-  end
 
   depends_on "icu4c"
 
@@ -58,9 +51,7 @@ class BoostAT170 < Formula
     # Boost is using "clang++ -x c" to select C compiler which breaks C++14
     # handling using ENV.cxx14. Using "cxxflags" and "linkflags" still works.
     args << "cxxflags=-std=c++14"
-    if ENV.compiler == :clang
-      args << "cxxflags=-stdlib=libc++" << "linkflags=-stdlib=libc++"
-    end
+    args << "cxxflags=-stdlib=libc++" << "linkflags=-stdlib=libc++" if ENV.compiler == :clang
 
     system "./bootstrap.sh", *bootstrap_args
     system "./b2", "headers"
